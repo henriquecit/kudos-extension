@@ -5,5 +5,10 @@
     "manifest_version": 3,
     "action": {
         "default_popup": "index.html"
-    }
+    },
+    "permissions": [
+        "storage"
+      ],
+
+    "options_page": "options.html"
 }
