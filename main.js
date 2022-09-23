@@ -1,37 +1,69 @@
 document.getElementById("submit").addEventListener("click", function () {
-    // fazer o curl
 
+    getWebhook().then(function(items) {
+        const threadKey = items.webhook.split('/spaces')[1].split('/messages')[0];
+        fetch(`${items.webhook}&threadKey=${threadKey}`, buildRequestOptions(items))
+        .then(response => response.text())
+        .then(() => {
+            alert('Your message has been sent!')
+        })
+        .catch(error => {
+            console.log('Error', error)
+            alert('An error occurred')
+        })
+    });    
+})
+
+
+function buildRequestOptions({nameUserConfig}) {
     const message = document.querySelector('#message').value;
     const name = document.querySelector('#name').value;
-    console.log('name: ', name)
+    const greeting = document.querySelector('#greeting').value;
 
     const headers = new Headers();
     headers.append("cache-control", "no-cache");
     headers.append("Content-Type", "application/json; charset=UTF-8");
 
-    //let body = new URLSearchParams();
-    //body.append(`{text: ${name} You rock: ${message}}`, "")
-    var raw = JSON.stringify({
-        "text": `${name} You rock: ${message}`
-      });
-    const requestOptions = {
+    return {
         method: 'POST',
         headers,
-        body: raw,
-    }
-    
-    getWebhook().then(function(items) {
-        fetch(items.webhook, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error))
-    });
+        body: JSON.stringify({
+            "cards": [
+              {
+                "header": {
+                  "title": `<font color=\"#ff0000\">${greeting}</font>`,
+                  "imageUrl": "https://goo.gl/aeDtrS",
+                  "imageStyle": "IMAGE"
+                },
 
-    
-})
+                "sections": [
+                    {
+                        "widgets": [{
+                            "textParagraph": {
+                                "text": `To: <b>${name}</b> <br> From: <b>${nameUserConfig}</b>`
+                            }
+                        }]
+                    },
+                  {
+                    "header": "Message:",
+                    "widgets": [
+                      {
+                        "textParagraph": {
+                          "text": `${message} `
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }),
+    }
+}
 
 function getWebhook() {
     return chrome.storage.sync.get({
-        webhook: ''
+        webhook: '',
+        nameUserConfig: ''
     })
 }
