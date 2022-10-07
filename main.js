@@ -14,6 +14,9 @@ document.getElementById("submit").addEventListener("click", function () {
     });    
 })
 
+document.getElementById("config-page").addEventListener("click", function () {
+  open_configuration()
+})
 
 function buildRequestOptions({nameUserConfig}) {
     const message = document.querySelector('#message').value;
@@ -59,6 +62,10 @@ function buildRequestOptions({nameUserConfig}) {
             ]
           }),
     }
+}
+
+function open_configuration() {
+  chrome.runtime.openOptionsPage ? chrome.runtime.openOptionsPage() : window.open(chrome.runtime.getURL("options.html"))
 }
 
 function getWebhook() {

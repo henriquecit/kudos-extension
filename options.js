@@ -15,6 +15,27 @@ function save_options() {
     });
   }
   
+  //adds a new team member
+  function add_member() {
+    const list = document.getElementById('teamMemberList');
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder ='Enter team member name';
+
+    list.appendChild(input);
+  }
+
+  function save_members() {
+    const list = document.getElementById('teamMemberList');
+
+    list.childNodes.forEach(childElement => {
+        if(childElement.type === 'text') {
+          console.log(childElement) 
+        }
+      }
+    )
+  }
+
   function restore_options() {
     chrome.storage.sync.get({
       webhook: '',
@@ -27,3 +48,4 @@ function save_options() {
   document.addEventListener('DOMContentLoaded', restore_options);
   document.getElementById('save').addEventListener('click',
       save_options);
+  document.getElementById('add').addEventListener('click', add_member);

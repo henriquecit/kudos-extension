@@ -1,14 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head><title>My Test Extension Options</title></head>
+<head>
+    <title>My Test Extension Options</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
 
-Chat Webhook URL:
-<input id="config" type="text">
+    <div class="container">
+        <ul class="flex-outer">
+            <li>  
+                <label for="config">Chat Webhook URL:</label>
+                <input type="text" id="config" placeholder="Enter your URL">
+            </li>
+            <li>  
+                <label for="nameUserConfig">Your Name:</label>
+                <input type="text" id="nameUserConfig" placeholder="Enter your Name">
+            </li>
 
-Your Name:
-<input id="nameUserConfig" type="text">
+            <li id="teamMemberList">  
+                <label for="teamMembers">Team Members:</label>
+                <input type="text" id="nameUserConfig" placeholder="Enter team member name">
+            </li>
 
+        </ul>
+    </div>    
+
+<br>
+<button id="add">+</button>
+
+<br>
 <div id="status"></div>
 <button id="save">Save</button>
 

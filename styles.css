@@ -1,0 +1,84 @@
+body {
+    min-width: 500px;
+    min-height: 350px;
+    padding: 5%;
+    background-color: #F6F8F9;
+}
+
+#submit {
+    background-color: #46BBC7;
+    min-width: 110px;
+    min-height: 35px;
+    border-radius: 5px;
+    color: #ffffff;
+    margin-left: auto;
+    padding: 8px 16px;
+    border: none; 
+    text-transform: uppercase;
+    letter-spacing: .09em;
+}
+  #submit:hover{
+    background-color: #116a6e;
+  }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    max-width: 80%;
+}
+
+.flex-outer {
+  list-style-type: none;
+  padding: 0;
+  min-width: 80%;
+  max-width: 800px;
+}
+
+.flex-outer li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.flex-outer > li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.flex-outer li label,
+.flex-outer li p {
+  padding: 8px;
+  font-weight: 300;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.flex-outer > li > label,
+.flex-outer li p {
+  flex: 1 0 120px;
+  max-width: 220px;
+}
+
+.flex-outer > li > label + *,
+.flex-inner {
+  flex: 1 0 220px;
+}
+
+.flex-outer li p {
+  margin: 0;
+}
+
+.flex-outer li input:not([type='checkbox']),
+.flex-outer li textarea {
+  padding: 15px;
+  border: none;
+}
+
+textarea{
+  border:solid 1px orange;
+  box-shadow: 0 0 10px black;
+}
+
+#teamMemberList > input {
+  margin: 10px;
+}

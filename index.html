@@ -1,26 +1,40 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="button.css">
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <select name="greeting" id="greeting">
-            <option value="Congratulations!">Congratulations!</option>
-            <option value="Great Job!">Great Job!</option>
-            <option value="Many Thanks!">Many Thanks!</option>
-            <option value="Thank You!">Thank You!</option>
-            <option value="Totally Awesome">Totally Awesome</option>
-            <option value="Very Happy">Very Happy</option>
-            <option value="Well Done">Well Done</option>
-            <option value="You Rock!">You Rock!</option>
-        </select>
-        <label for="name">Name</label>
-        <input id="name" type="text" name="name" />
-        
-        <label for="message">Message</label>
-        <input id="message" type="text" name="message" />
-        
-        <button id="submit"> Click Here!! </button>
-        <script src="main.js"></script>
+            <div class="container">
+                <ul class="flex-outer">
+                    <li>
+                        <label for="greeting">Select your Greetings:</label>
+                        <select name="greeting" id="greeting">
+                            <option value="Congratulations!">Congratulations!</option>
+                            <option value="Great Job!">Great Job!</option>
+                            <option value="Many Thanks!">Many Thanks!</option>
+                            <option value="Thank You!">Thank You!</option>
+                            <option value="Totally Awesome">Totally Awesome</option>
+                            <option value="Very Happy">Very Happy</option>
+                            <option value="Well Done">Well Done</option>
+                            <option value="You Rock!">You Rock!</option>
+                        </select>
+                    </li>
+                    <li>  
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Enter your first name here">
+                    </li>                
+                    <li>
+                        <label for="message">Message</label>
+                        <textarea placeholder="Insert your message here..." id="message" style="border:solid 1px black;" name="message"></textarea>
+                    </li>
+                    <li>
+                        <button id="submit"> Send Kudos </button>
+                    </li>
+                </ul>
+            </div>
+            
+                <p>or</p> 
+            <a href="#" id="config-page"> Go to the configuration page</a>
+            <script src="main.js"></script>
   </body>
 </html>
