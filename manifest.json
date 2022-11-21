@@ -1,6 +1,6 @@
 {
-    "name": "Kudo extension app",
-    "description": "Extension to share feedback on real time",
+    "name": "Kudos for Google Chat extension app",
+    "description": "Extension to share feedback on real time on your google chat channel",
     "version" :"1.0",
     "manifest_version": 3,
     "action": {
@@ -9,6 +9,10 @@
     "permissions": [
         "storage"
       ],
-
+    "icons": { 
+        "16": "icon16.png",
+        "48": "icon64.png",
+        "128": "icon128.png" 
+    },
     "options_page": "options.html"
 }
