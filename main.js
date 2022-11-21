@@ -1,3 +1,34 @@
+const icons = {
+  youRock: {
+    imageURL: 'https://i.imgur.com/T9xrcBy.png',
+    value: 'You Rock!'
+  },
+  thankYou: {
+    imageURL: 'https://i.imgur.com/JqIcb8e.png',
+    value: 'Many Thanks!'
+  },
+  wellDone: {
+    imageURL: 'https://i.imgur.com/oKAlQ0G.png',
+    value: 'Well Done'
+  },
+  awesome: {
+    imageURL: 'https://i.imgur.com/FIZIzls.png',
+    value: 'Totally Awesome'
+  },
+  happy: {
+    imageURL: 'https://i.imgur.com/DxXn360.png',
+    value: 'Very Happy'
+  },
+  greatJob: {
+    imageURL: 'https://i.imgur.com/9SflKJm.png',
+    value: 'Great Job!'
+  },
+  congratulations: {
+    imageURL: 'https://i.imgur.com/TassQG9.png',
+    value: 'Congratulations!'
+  }
+}
+
 document.getElementById("submit").addEventListener("click", function () {
     getWebhook().then(function(items) {
         const threadKey = getThreadKey(items.webhook);
@@ -31,7 +62,10 @@ document.getElementById("config-page").addEventListener("click", function () {
 function buildRequestOptions({nameUserConfig}) {
     const message = document.querySelector('#message').value;
     const name = document.querySelector('#teamMembers').value;
-    const greeting = document.querySelector('#greeting').value;
+    const greetingValue = document.querySelector('#greeting').value;
+    const { imageURL } = icons[greetingValue];
+    const greetingText = icons[greetingValue].value;
+
 
     const headers = new Headers();
     headers.append("cache-control", "no-cache");
@@ -44,8 +78,8 @@ function buildRequestOptions({nameUserConfig}) {
             "cards": [
               {
                 "header": {
-                  "title": `<font color=\"#ff0000\">${greeting}</font>`,
-                  "imageUrl": "https://goo.gl/aeDtrS",
+                  "title": `<font color=\"#ff0000\">${greetingText}</font>`,
+                  "imageUrl": imageURL,
                   "imageStyle": "IMAGE"
                 },
 
