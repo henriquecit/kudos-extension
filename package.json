@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint . --ext .js",
-    "lint:fix": "npx eslint . --ext .js --fix"
+    "lint:fix": "npx eslint . --ext .js --fix",
+    "build": "zip -r kudos-extension.zip . -x 'node_modules*' -x 'package*.json' -x 'readme.md' -x '*.git*' -x '.eslintrs.js'"
   },
   "repository": {
     "type": "git",
