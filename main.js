@@ -59,6 +59,7 @@ document.getElementById("config-page").addEventListener("click", function () {
   open_configuration()
 })
 
+
 function buildRequestOptions({nameUserConfig}) {
     const message = document.querySelector('#message').value;
     const name = document.querySelector('#teamMembers').value;
