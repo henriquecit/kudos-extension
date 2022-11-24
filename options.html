@@ -9,13 +9,22 @@
     <div class="container">
         <ul class="flex-outer">
             <li>  
-                <label for="config">Chat Webhook URL:</label>
-                <input type="text" id="config" placeholder="Enter your URL">
-            </li>
-            <li>  
                 <label for="nameUserConfig">Your Name:</label>
                 <input type="text" id="nameUserConfig" placeholder="Enter your Name">
             </li>
+            <li>  
+                <label for="teams">Create a Team:</label>
+                <input type="text" id="teamName" placeholder="Enter Team name">
+                <button id="createTeamButton">Create</button>
+            </li>
+            <li>  
+                <label for="teams">Teams:</label>
+                <select id="teams"></select>
+            </li>
+            <li>  
+                <label for="config">Chat Webhook URL:</label>
+                <input type="text" id="config" placeholder="Enter your URL">
+            </li> 
             <li id="teamMemberList">  
                 <label for="teamMembers">Team Members:</label>
             </li>

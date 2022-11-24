@@ -1,13 +1,16 @@
+let teams = {};
+const teamsSelectElement = document.getElementById('teams');
+const webHookElement = document.getElementById('config');
+const userNameElement = document.getElementById('nameUserConfig');
+const teamMemberListElement = document.getElementById('teamMemberList');
+
 // Saves options to chrome.storage
 function save_options() {
-  const webhook = document.getElementById('config').value;
-  const nameUserConfig = document.getElementById('nameUserConfig').value;
-  const teamMembers = getTeamMembers();
+  const nameUserConfig = userNameElement.value;
 
   chrome.storage.sync.set({
-    webhook,
     nameUserConfig,
-    teamMembers,
+    teamsConfig: teams,
   }, () => {
     // Update status to let user know options were saved.
     const status = document.getElementById('status');
@@ -20,14 +23,63 @@ function save_options() {
 
 // adds a new team member
 function add_member(name) {
-  const list = document.getElementById('teamMemberList');
   const input = document.createElement('input');
   input.type = 'text';
+  input.classList.add('teamMemberInput');
   input.placeholder = 'Enter team member name';
+  input.addEventListener('focusout', onFocusLeaveSaveEverything)
   if (name && typeof name === 'string') {
     input.value = name;
   }
-  list.appendChild(input);
+  teamMemberListElement.appendChild(input);
+}
+
+//create team if it does not exist
+function createTeam() {
+  const teamName = document.getElementById('teamName').value;
+  if (!teamName) {
+    alert('Please add a value on team name');
+    return;
+  }
+  if (!teams[teamName]) {
+    teams[teamName] = {};
+  }
+  updateTeamsSelect();
+}
+
+function getTeamName() {
+  return teamsSelectElement.value.replace("_", " ");
+}
+
+function changeTeam() {
+  const team = getTeamName();
+  const { teamMembers, webhook } = teams[team];
+  webHookElement.value = webhook || '';
+  clearTeamMembersInputs();
+  updateTeamMembers(teamMembers);
+}
+
+function updateTeamsSelect() {
+  const teamsNames = Object.keys(teams);
+  const options = teamsNames.map((teamName) => `<option value=${teamName.replace(" ","_")}>${teamName}</option>`).join('\n');
+  teamsSelectElement.innerHTML = options;
+}
+
+function updateTeamMembers(teamMembers) {
+  if (!teamMembers) {
+    add_member();
+    return;
+  }
+  teamMembers.forEach(teamMember => {
+    add_member(teamMember);
+  })
+}
+
+function clearTeamMembersInputs() {
+  const inputs = document.querySelectorAll('.teamMemberInput');
+  inputs.forEach(input => {
+    input.remove();
+  })
 }
 
 function getTeamMembers() {
@@ -45,14 +97,17 @@ function getTeamMembers() {
 
 function restore_options() {
   chrome.storage.sync.get({
-    webhook: '',
-    nameUserConfig: '',
-    teamMembers: null,
+    teamsConfig: null,
+    nameUserConfig: ''
   }, (items) => {
-    document.getElementById('config').value = items.webhook;
-    document.getElementById('nameUserConfig').value = items.nameUserConfig;
-    if (items.teamMembers) {
-      items.teamMembers.forEach((member) => {
+    teams = items.teamsConfig;    
+    updateTeamsSelect();
+    const teamName = getTeamName();
+    const { teamMembers, webhook } = teams[teamName]
+    userNameElement.value = items.nameUserConfig;
+    webHookElement.value = webhook;
+    if (teamMembers) {
+      teamMembers.forEach((member) => {
         add_member(member);
       });
     }
@@ -61,11 +116,9 @@ function restore_options() {
 
 function exportSettings() {
   chrome.storage.sync.get({
-    webhook: '',
     nameUserConfig: '',
-    teamMembers: null,
+    teamsConfig: null,
   }, (items) => {
-    console.log(items);
     const a = document.createElement('a');
     a.setAttribute('href', `data:text/plain;charset=utf-u,${encodeURIComponent(JSON.stringify(items))}`);
     a.setAttribute('download', 'kudosapp.json');
@@ -97,6 +150,14 @@ function importSettings(e) {
   }
 }
 
+function onFocusLeaveSaveEverything(event) {
+  const webhook = webHookElement.value;
+  const teamMembers = getTeamMembers();
+  const teamName = getTeamName();
+  teams[teamName].webhook = webhook;
+  teams[teamName].teamMembers = teamMembers;
+}
+
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener(
   'click',
@@ -105,3 +166,6 @@ document.getElementById('save').addEventListener(
 document.getElementById('add').addEventListener('click', add_member);
 document.getElementById('export').addEventListener('click', exportSettings);
 document.getElementById('import').addEventListener('change', importSettings);
+document.getElementById('createTeamButton').addEventListener('click', createTeam);
+document.getElementById('teams').addEventListener('change', changeTeam);
+webHookElement.addEventListener('focusout', onFocusLeaveSaveEverything)
