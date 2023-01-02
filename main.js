@@ -108,10 +108,15 @@ function buildRequestOptions({ nameUserConfig }) {
 }
 
 getWebhook().then((items) => {
-  const { teamMembers } = items;
+  const { teamsConfig } = items;
+  const teamsSelect = document.querySelector('#teamName');
   const select = document.querySelector('#teamMembers');
+  const teamsOptions = Object.keys(teamsConfig).map((teamName) => `<option value=${teamName}>${teamName.replace(" ","_")}</option>`).join('\n');
+  teamsSelect.innerHTML = teamsOptions;
 
+  const { teamMembers } = teamsConfig[teamsSelect.value];
   const options = teamMembers.map((teamMember) => `<option value=${teamMember.toLowerCase()}>${teamMember}</option>`).join('\n');
+
   select.innerHTML = options;
 });
 
@@ -121,8 +126,7 @@ function open_configuration() {
 
 function getWebhook() {
   return chrome.storage.sync.get({
-    webhook: '',
     nameUserConfig: '',
-    teamMembers: '',
+    teamsConfig: '',
   });
 }
