@@ -29,13 +29,18 @@ const icons = {
   },
 };
 
+const teamsSelectElement = document.getElementById('teamName');
+const teamsMemberSelectElement = document.querySelector('#teamMembers');
+let webhookURL;
+let teams;
+let yourName;
+
 document.getElementById('submit').addEventListener('click', () => {
-  getWebhook().then((items) => {
-    const threadKey = getThreadKey(items.webhook);
+    const threadKey = getThreadKey(webhookURL);
     if (!threadKey) {
       return;
     }
-    fetch(`${items.webhook}&threadKey=${threadKey}`, buildRequestOptions(items))
+    fetch(`${webhookURL}&threadKey=${threadKey}`, buildRequestOptions())
       .then((response) => response.text())
       .then(() => {
         alert('Your message has been sent!');
@@ -44,7 +49,6 @@ document.getElementById('submit').addEventListener('click', () => {
         console.log('Error', error);
         alert('An error occurred');
       });
-  });
 });
 
 function getThreadKey(webhook) {
@@ -59,7 +63,7 @@ document.getElementById('config-page').addEventListener('click', () => {
   open_configuration();
 });
 
-function buildRequestOptions({ nameUserConfig }) {
+function buildRequestOptions() {
   const message = document.querySelector('#message').value;
   const name = document.querySelector('#teamMembers').value;
   const greetingValue = document.querySelector('#greeting').value;
@@ -86,7 +90,7 @@ function buildRequestOptions({ nameUserConfig }) {
             {
               widgets: [{
                 textParagraph: {
-                  text: `To: <b>${name}</b> <br> From: <b>${nameUserConfig}</b>`,
+                  text: `To: <b>${name}</b> <br> From: <b>${yourName}</b>`,
                 },
               }],
             },
@@ -109,16 +113,30 @@ function buildRequestOptions({ nameUserConfig }) {
 
 getWebhook().then((items) => {
   const { teamsConfig } = items;
-  const teamsSelect = document.querySelector('#teamName');
-  const select = document.querySelector('#teamMembers');
-  const teamsOptions = Object.keys(teamsConfig).map((teamName) => `<option value=${teamName}>${teamName.replace(" ","_")}</option>`).join('\n');
-  teamsSelect.innerHTML = teamsOptions;
+  const teamsOptions = Object.keys(teamsConfig).map((teamName) => `<option value=${teamName.replace(" ","_")}>${teamName}</option>`).join('\n');
+  teamsSelectElement.innerHTML = teamsOptions;
 
-  const { teamMembers } = teamsConfig[teamsSelect.value];
-  const options = teamMembers.map((teamMember) => `<option value=${teamMember.toLowerCase()}>${teamMember}</option>`).join('\n');
-
-  select.innerHTML = options;
+  const { teamMembers } = teamsConfig[teamsSelectElement.value];
+  teams = teamsConfig;
+  yourName = items.nameUserConfig;
+  updateTeamMembers(teamMembers)
 });
+
+function updateTeamMembers(teamMembers) {
+  const options = teamMembers.map((teamMember) => `<option value=${teamMember.toLowerCase()}>${teamMember}</option>`).join('\n');
+  teamsMemberSelectElement.innerHTML = options;
+}
+
+function changeTeam() {
+  const team = getTeamName();
+  const { teamMembers, webhook } = teams[team];
+  webhookURL = webhook;
+  updateTeamMembers(teamMembers);
+}
+
+function getTeamName() {
+  return teamsSelectElement.value.replace("_", " ");
+}
 
 function open_configuration() {
   chrome.runtime.openOptionsPage ? chrome.runtime.openOptionsPage() : window.open(chrome.runtime.getURL('options.html'));
@@ -130,3 +148,5 @@ function getWebhook() {
     teamsConfig: '',
   });
 }
+
+teamsSelectElement.addEventListener('change', changeTeam);
